@@ -87,8 +87,6 @@ export default function LiveRepairTracker() {
   const cur = STEPS[idx];
 
   return (
-    // NOTE: overflow-x-clip (not overflow-hidden). overflow-hidden turns the section into a
-    // scroll container and silently breaks every position:sticky element inside it.
     <section ref={sectionRef} id="tracker" className="relative overflow-x-clip bg-[#08080a] px-5 py-16 text-white sm:py-20 lg:px-10">
       <style>{`
         @keyframes lt-ping{0%{box-shadow:0 0 0 0 rgba(249,115,22,.55)}100%{box-shadow:0 0 0 14px rgba(249,115,22,0)}}
@@ -97,8 +95,7 @@ export default function LiveRepairTracker() {
       `}</style>
       <div className="pointer-events-none absolute -right-24 top-1/4 h-96 w-96 rounded-full bg-orange-600/10 blur-[120px]" />
 
-      {/* extra bottom padding keeps the left panel stuck until the last step is reached */}
-      <div className="relative mx-auto max-w-7xl pb-24 lg:grid lg:grid-cols-[.8fr_1.2fr] lg:gap-16 lg:pb-40">
+      <div className="relative mx-auto max-w-7xl lg:grid lg:grid-cols-[.8fr_1.2fr] lg:gap-16">
         {/* Left column on desktop (sticky). On mobile it "dissolves" (contents) so the bar below can stick. */}
         <div className="contents lg:sticky lg:top-20 lg:block lg:self-start">
           <div>
@@ -108,7 +105,7 @@ export default function LiveRepairTracker() {
             </p>
           </div>
 
-          {/* DESKTOP status card (always visible while the steps scroll) */}
+          {/* DESKTOP status card */}
           <div className="mt-6 hidden rounded-2xl border border-white/10 bg-white/[.04] p-5 lg:block">
             <div className="flex items-center justify-between text-xs text-slate-500">
               <span>Current step</span>
@@ -138,7 +135,7 @@ export default function LiveRepairTracker() {
             </a>
           </div>
 
-          {/* MOBILE / TABLET sticky bar. Change top-3 to top-20 if you have a fixed navbar. */}
+          {/* MOBILE / TABLET sticky bar */}
           <div className="sticky top-3 z-30 mb-8 mt-8 rounded-2xl border border-orange-500/30 bg-[#101013]/95 p-3 shadow-xl shadow-black/60 backdrop-blur lg:hidden">
             <div className="flex items-center gap-3">
               <span className="text-2xl">{cur.icon}</span>

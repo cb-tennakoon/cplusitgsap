@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 
 // ---- EDIT THESE (keep the hours the same as SystemStatusFooter.tsx) ----
 const BRAND = "Doorstep Repairs";
+const LOGO_SRC = "/LOGO2.png"; // file in the public/ folder, must match the name exactly
 const PHONE = "94000000000"; // country code, no +
 const PHONE_DISPLAY = "+94 00 000 0000";
 const OPEN_HOUR = 8; // placeholder, set your real opening time
@@ -15,19 +16,36 @@ const NAV = [
   { id: "symptoms", label: "What we fix" },
   { id: "xray", label: "Inside your device" },
   { id: "tracker", label: "How it works" },
-  { id: "repair-log", label: "Recent jobs" },
+  // { id: "repair-log", label: "Recent jobs" },
   { id: "contact", label: "Contact" },
 ];
 
 const h12 = (h: number) => `${h % 12 || 12} ${h < 12 ? "AM" : "PM"}`;
 
 function Logo() {
+  const [failed, setFailed] = useState(false);
+
+  // if the image is missing or broken, show the four orange squares instead
+  if (failed) {
+    return (
+      <span className="grid grid-cols-2 gap-[2px]" aria-hidden>
+        {[0, 1, 2, 3].map((i) => (
+          <span key={i} className="h-[9px] w-[9px] bg-orange-500" />
+        ))}
+      </span>
+    );
+  }
+
   return (
-    <span className="grid grid-cols-2 gap-[2px]" aria-hidden>
-      {[0, 1, 2, 3].map((i) => (
-        <span key={i} className="h-[9px] w-[9px] bg-orange-500" />
-      ))}
-    </span>
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      src={LOGO_SRC}
+      alt=""
+      aria-hidden
+      height={36}
+      onError={() => setFailed(true)}
+      className="h-8 w-auto object-contain sm:h-9"
+    />
   );
 }
 
@@ -113,14 +131,15 @@ export default function SiteHeader() {
 
       <div
         className={`border-b transition-colors duration-300 ${
-          scrolled ? "border-white/10 bg-[#141417]/90 shadow-lg shadow-black/40 backdrop-blur-md" : "border-transparent bg-[#08080a]/80 backdrop-blur"
+          scrolled
+            ? "border-slate-100 bg-gray-200 shadow-md shadow-black/10"
+            : "border-slate-100/70 bg-gray-200"
         }`}
       >
         <div className="mx-auto flex h-14 max-w-7xl items-center justify-between gap-4 px-5 lg:h-16 lg:px-10">
           {/* brand */}
-          <a href="#" className="flex items-center gap-3 text-white" aria-label={`${BRAND}, back to top`}>
+          <a href="#" className="flex items-center gap-3 text-slate-900" aria-label={`${BRAND}, back to top`}>
             <Logo />
-            <span className="text-base font-bold tracking-tight sm:text-lg">{BRAND}</span>
           </a>
 
           {/* desktop nav */}
@@ -133,7 +152,7 @@ export default function SiteHeader() {
                   href={`#${n.id}`}
                   aria-current={on ? "true" : undefined}
                   className={`relative rounded-lg px-3 py-2 text-sm font-medium transition ${
-                    on ? "bg-white/10 text-white" : "text-slate-400 hover:bg-white/5 hover:text-white"
+                    on ? "bg-gray-100 text-slate-900" : "text-slate-600 hover:bg-gray-100 hover:text-slate-900"
                   }`}
                 >
                   {n.label}
@@ -147,15 +166,15 @@ export default function SiteHeader() {
           <div className="flex items-center gap-3">
             <span
               className={`hidden items-center gap-2 rounded-full border px-3 py-1 text-xs font-semibold md:flex ${
-                open ? "border-emerald-400/30 bg-emerald-500/10 text-emerald-300" : "border-amber-400/30 bg-amber-500/10 text-amber-300"
+                open ? "border-emerald-600/30 bg-emerald-50 text-emerald-700" : "border-amber-600/30 bg-amber-50 text-amber-700"
               }`}
               suppressHydrationWarning
             >
-              <span className={`h-2 w-2 rounded-full ${open ? "sh-live bg-emerald-400" : "bg-amber-400"}`} />
+              <span className={`h-2 w-2 rounded-full ${open ? "sh-live bg-emerald-500" : "bg-amber-500"}`} />
               {status}
             </span>
 
-            <a href={`tel:+${PHONE}`} className="hidden items-center gap-2 text-sm font-semibold text-slate-300 transition hover:text-orange-300 xl:flex">
+            <a href={`tel:+${PHONE}`} className="hidden items-center gap-2 text-sm font-semibold text-slate-700 transition hover:text-orange-600 xl:flex">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
                 <path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z" />
               </svg>
@@ -176,7 +195,7 @@ export default function SiteHeader() {
               aria-expanded={menu}
               aria-controls="mobile-menu"
               aria-label={menu ? "Close menu" : "Open menu"}
-              className="grid h-10 w-10 place-items-center rounded-lg border border-white/10 bg-white/5 text-white transition hover:border-orange-400/50 lg:hidden"
+              className="grid h-10 w-10 place-items-center rounded-lg border border-slate-300 bg-white text-slate-800 transition hover:border-orange-500 lg:hidden"
             >
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden>
                 {menu ? <path d="M6 6l12 12M18 6L6 18" /> : <path d="M4 7h16M4 12h16M4 17h16" />}
@@ -186,11 +205,11 @@ export default function SiteHeader() {
         </div>
       </div>
 
-      {/* mobile menu, styled like a Windows start menu */}
+      {/* mobile menu */}
       {menu && (
         <div
           id="mobile-menu"
-          className="absolute inset-x-3 top-full mt-2 overflow-hidden rounded-xl border border-white/10 bg-[#1f1f23]/95 shadow-2xl shadow-black/70 backdrop-blur-xl lg:hidden"
+          className="absolute inset-x-3 top-full mt-2 overflow-hidden rounded-xl border border-slate-300 bg-gray-200 shadow-2xl shadow-black/20 lg:hidden"
         >
           <ul className="p-2">
             {NAV.map((n) => {
@@ -201,7 +220,7 @@ export default function SiteHeader() {
                     href={`#${n.id}`}
                     onClick={() => setMenu(false)}
                     className={`flex items-center justify-between rounded-lg px-4 py-3 text-sm font-medium transition ${
-                      on ? "bg-white/10 text-white" : "text-slate-300 hover:bg-white/5"
+                      on ? "bg-gray-100 text-slate-900" : "text-slate-700 hover:bg-gray-100"
                     }`}
                   >
                     {n.label}
@@ -212,9 +231,9 @@ export default function SiteHeader() {
             })}
           </ul>
 
-          <div className="border-t border-white/10 bg-black/25 p-4">
-            <p className={`mb-3 flex items-center gap-2 text-xs font-semibold ${open ? "text-emerald-300" : "text-amber-300"}`}>
-              <span className={`h-2 w-2 rounded-full ${open ? "bg-emerald-400" : "bg-amber-400"}`} />
+          <div className="border-t border-slate-300 bg-gray-100 p-4">
+            <p className={`mb-3 flex items-center gap-2 text-xs font-semibold ${open ? "text-emerald-700" : "text-amber-700"}`}>
+              <span className={`h-2 w-2 rounded-full ${open ? "bg-emerald-500" : "bg-amber-500"}`} />
               {status}
             </p>
             <a
@@ -225,12 +244,12 @@ export default function SiteHeader() {
               Book a visit
             </a>
             <div className="grid grid-cols-2 gap-3">
-              <a href={`tel:+${PHONE}`} className="rounded-xl border border-white/15 bg-white/5 px-4 py-3 text-center text-sm font-semibold text-orange-200">
+              <a href={`tel:+${PHONE}`} className="rounded-xl border border-slate-300 bg-white px-4 py-3 text-center text-sm font-semibold text-orange-700">
                 Call now
               </a>
               <a
                 href={`https://wa.me/${PHONE}?text=${waMsg}`}
-                className="rounded-xl border border-emerald-400/40 bg-emerald-500/10 px-4 py-3 text-center text-sm font-semibold text-emerald-300"
+                className="rounded-xl border border-emerald-600/40 bg-emerald-50 px-4 py-3 text-center text-sm font-semibold text-emerald-700"
               >
                 WhatsApp
               </a>

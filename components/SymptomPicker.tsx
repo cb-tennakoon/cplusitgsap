@@ -18,7 +18,6 @@ type Symptom = {
   note: string;
 };
 
-// Placeholder prices in LKR. Change to your real rates.
 const SYMPTOMS: Symptom[] = [
   {
     id: "no-power",
@@ -114,13 +113,27 @@ const SYMPTOMS: Symptom[] = [
 
 export default function SymptomPicker() {
   const [sel, setSel] = useState<string | null>(null);
+  const [rightHeight, setRightHeight] = useState<number | null>(null);
   const root = useRef<HTMLDivElement>(null);
+  const leftRef = useRef<HTMLDivElement>(null);
   const reportRef = useRef<HTMLDivElement>(null);
   const costRef = useRef<HTMLSpanElement>(null);
   const flipRefs = useRef<Record<string, HTMLDivElement | null>>({});
 
   const active = SYMPTOMS.find((s) => s.id === sel) ?? null;
   const reduce = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  // Sync right panel height to left tiles height
+  useEffect(() => {
+    const updateHeight = () => {
+      if (leftRef.current) {
+        setRightHeight(leftRef.current.offsetHeight);
+      }
+    };
+    updateHeight();
+    window.addEventListener("resize", updateHeight);
+    return () => window.removeEventListener("resize", updateHeight);
+  }, []);
 
   // tiles flip
   useEffect(() => {
@@ -166,6 +179,7 @@ export default function SymptomPicker() {
   return (
     <section id="symptoms" ref={root} className="relative overflow-hidden bg-[#08080a] px-5 py-20 text-white lg:px-10">
       <div className="pointer-events-none absolute -right-24 top-10 h-80 w-80 rounded-full bg-orange-600/10 blur-[110px]" />
+      
       <div className="relative mx-auto max-w-7xl">
         <div className="mb-10 max-w-2xl">
           <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">What&apos;s wrong with your device?</h2>
@@ -173,8 +187,13 @@ export default function SymptomPicker() {
         </div>
 
         <div className="grid items-start gap-8 lg:grid-cols-[1.1fr_1fr]">
-          {/* tiles */}
-          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3" style={{ perspective: "1000px" }}>
+          
+          {/* LEFT - tiles */}
+          <div
+            ref={leftRef}
+            className="grid grid-cols-2 gap-4 sm:grid-cols-3"
+            style={{ perspective: "1000px" }}
+          >
             {SYMPTOMS.map((s) => (
               <button
                 key={s.id}
@@ -214,10 +233,13 @@ export default function SymptomPicker() {
             ))}
           </div>
 
-          {/* report */}
-          <div className="min-h-[24rem]">
+          {/* RIGHT - exact same height as left + scroll */}
+          <div
+            className="w-full"
+            style={rightHeight ? { height: rightHeight } : undefined}
+          >
             {!active && (
-              <div className="grid h-full min-h-[24rem] place-items-center rounded-2xl border border-dashed border-white/15 p-8 text-center text-slate-500">
+              <div className="grid h-full place-items-center rounded-2xl border border-dashed border-white/15 p-8 text-center text-slate-500">
                 <div>
                   <p className="text-4xl">🩺</p>
                   <p className="mt-3">Pick a problem to run a free diagnosis.</p>
@@ -226,16 +248,24 @@ export default function SymptomPicker() {
             )}
 
             {active && (
-              <div ref={reportRef} className="relative overflow-hidden rounded-2xl border border-white/10 bg-[#141417] shadow-2xl shadow-black/50" aria-live="polite">
+              <div
+                ref={reportRef}
+                className="relative flex h-full flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#141417] shadow-2xl shadow-black/50"
+                aria-live="polite"
+              >
+                {/* Scan line */}
                 <div className="rp-scan pointer-events-none absolute inset-x-0 z-10 h-16 bg-gradient-to-b from-transparent via-orange-500/25 to-transparent" />
-                <div className="flex items-center justify-between border-b border-white/10 bg-[#1c1c20] px-5 py-3 font-mono text-xs text-slate-400">
+
+                {/* Fixed header */}
+                <div className="flex shrink-0 items-center justify-between border-b border-white/10 bg-[#1c1c20] px-5 py-3 font-mono text-xs text-slate-400">
                   <span>diagnostic-report / {active.id}</span>
                   <span className="flex items-center gap-2 text-emerald-300">
                     <span className="h-2 w-2 rounded-full bg-emerald-400" /> done
                   </span>
                 </div>
 
-                <div className="space-y-5 p-5">
+                {/* Scrollable body */}
+                <div className="flex-1 space-y-5 overflow-y-auto p-5">
                   <div className="rp-row">
                     <p className="text-xs text-slate-500">Problem</p>
                     <p className="text-xl font-bold">{active.title}</p>
@@ -263,7 +293,9 @@ export default function SymptomPicker() {
                       <p className="text-xs text-slate-500">Estimated cost</p>
                       <p className="mt-1 text-lg font-bold text-orange-400">
                         LKR <span ref={costRef}>{active.costMin.toLocaleString()}</span>
-                        <span className="block text-xs font-medium text-slate-400">up to {active.costMax.toLocaleString()}</span>
+                        <span className="block text-xs font-medium text-slate-400">
+                          up to {active.costMax.toLocaleString()}
+                        </span>
                       </p>
                     </div>
                     <div className="rounded-xl bg-white/5 p-4">
@@ -288,7 +320,10 @@ export default function SymptomPicker() {
                       Ask on WhatsApp
                     </a>
                   </div>
-                  <p className="rp-row text-xs text-slate-600">Estimate only. Final price is confirmed after inspection at your home.</p>
+
+                  <p className="rp-row text-xs text-slate-600">
+                    Estimate only. Final price is confirmed after inspection at your home.
+                  </p>
                 </div>
               </div>
             )}

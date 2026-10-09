@@ -36,7 +36,7 @@ const LINKS = [
   { label: "What we fix", href: "#symptoms" },
   { label: "See inside your device", href: "#xray" },
   { label: "How a visit works", href: "#tracker" },
-  { label: "Recent jobs", href: "#repair-log" },
+  // { label: "Recent jobs", href: "#repair-log" },
   { label: "Book a visit", href: "#book" },
 ];
 
