@@ -62,15 +62,18 @@ export default function CrashHero() {
           {/* Left content */}
           <div className="w-full text-center lg:text-left">
             <div
-              className="h-in mb-6 inline-flex items-center gap-2.5 rounded-full border border-orange-500/40 bg-orange-500/10 px-4 py-2 text-sm font-semibold text-orange-300 backdrop-blur-sm"
+              className="h-in mb-6 inline-flex max-w-full items-center gap-2.5 whitespace-nowrap rounded-full border border-orange-500/40 bg-orange-500/10 px-4 py-2 text-[13px] font-semibold text-orange-300 backdrop-blur-sm sm:text-sm"
               style={{ animationDelay: "100ms" }}
             >
-              <span className="relative flex h-2.5 w-2.5">
+              <span className="relative flex h-2.5 w-2.5 shrink-0">
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-60" />
                 <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-emerald-500" />
               </span>
-              Technician available now · arrives in about{" "}
-              <b className="tabular-nums">{eta}</b> min
+              <span>
+                <span className="sm:hidden">Available now · arrives in ~</span>
+                <span className="hidden sm:inline">Technician available now · arrives in about </span>
+                <b className="tabular-nums">{eta}</b> min
+              </span>
             </div>
 
             <h1
