@@ -98,9 +98,9 @@ export default function LiveRepairTracker() {
       <div className="relative mx-auto max-w-7xl lg:grid lg:grid-cols-[.8fr_1.2fr] lg:gap-16">
         {/* Left column on desktop (sticky). On mobile it "dissolves" (contents) so the bar below can stick. */}
         <div className="contents lg:sticky lg:top-20 lg:block lg:self-start">
-          <div>
-            <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">Track your repair, step by step</h2>
-            <p className="mt-3 max-w-md text-slate-400">
+          <div className="text-center lg:text-left">
+            <h2 className="text-balance text-3xl font-bold tracking-tight sm:text-4xl">Track your repair, step by step</h2>
+            <p className="mx-auto mt-3 max-w-md text-pretty text-slate-400 lg:mx-0">
               From the moment you book, you always know what is happening. Scroll to follow a typical visit.
             </p>
           </div>
@@ -123,7 +123,7 @@ export default function LiveRepairTracker() {
             </div>
           </div>
 
-          <div className="mt-6 flex flex-wrap gap-3">
+          <div className="mt-6 flex flex-wrap justify-center gap-3 lg:justify-start">
             <a href="#book" className="rounded-2xl bg-orange-600 px-6 py-3 font-semibold shadow-lg shadow-orange-600/25 transition hover:-translate-y-0.5 hover:bg-orange-500">
               Book a visit
             </a>
@@ -196,14 +196,14 @@ export default function LiveRepairTracker() {
                         : "border-white/5 bg-white/[.02] opacity-45"
                   }`}
                 >
-                  <div className="flex flex-wrap items-center justify-between gap-2">
-                    <h3 className="flex items-center gap-3 text-xl font-semibold">
+                  <div className="flex flex-wrap items-center justify-center gap-2 lg:justify-between">
+                    <h3 className="flex items-center justify-center gap-3 text-xl font-semibold lg:justify-start">
                       <span className="text-2xl">{s.icon}</span>
                       {s.title}
                     </h3>
                     <span className="rounded-full bg-white/5 px-3 py-1 text-xs font-medium text-slate-300">{s.time}</span>
                   </div>
-                  <p className="mt-2 text-slate-400">{s.text}</p>
+                  <p className="mt-2 text-center text-slate-400 lg:text-left">{s.text}</p>
                 </div>
               </li>
             );

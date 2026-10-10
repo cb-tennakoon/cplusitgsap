@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 
-const PHONE = "94000000000"; // country code, no +
+const PHONE = "94727348466"; // country code, no +
 
 type Cause = { name: string; chance: number };
 type Symptom = {
@@ -181,9 +181,9 @@ export default function SymptomPicker() {
       <div className="pointer-events-none absolute -right-24 top-10 h-80 w-80 rounded-full bg-orange-600/10 blur-[110px]" />
       
       <div className="relative mx-auto max-w-7xl">
-        <div className="mb-10 max-w-2xl">
-          <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">What&apos;s wrong with your device?</h2>
-          <p className="mt-3 text-slate-400">Tap the problem that matches. We&apos;ll show the likely cause, price and time before you book.</p>
+        <div className="mx-auto mb-10 max-w-2xl text-center">
+          <h2 className="text-balance text-3xl font-bold tracking-tight sm:text-4xl">What&apos;s wrong with your device?</h2>
+          <p className="mx-auto mt-3 max-w-xl text-pretty text-slate-400">Tap the problem that matches. We&apos;ll show the likely cause, price and time before you book.</p>
         </div>
 
         <div className="grid items-start gap-8 lg:grid-cols-[1.1fr_1fr]">
@@ -288,7 +288,7 @@ export default function SymptomPicker() {
                     </div>
                   </div>
 
-                  <div className="rp-row grid grid-cols-2 gap-4">
+                  {/* <div className="rp-row grid grid-cols-2 gap-4">
                     <div className="rounded-xl bg-white/5 p-4">
                       <p className="text-xs text-slate-500">Estimated cost</p>
                       <p className="mt-1 text-lg font-bold text-orange-400">
@@ -302,7 +302,7 @@ export default function SymptomPicker() {
                       <p className="text-xs text-slate-500">Time needed</p>
                       <p className="mt-1 text-lg font-bold">{active.time}</p>
                     </div>
-                  </div>
+                  </div> */}
 
                   <p className="rp-row text-sm text-slate-400">{active.note}</p>
 

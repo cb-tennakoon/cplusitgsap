@@ -276,9 +276,9 @@ const DEVICES: Device[] = [
     ],
   },
   {
-    id: "tv",
-    name: "TV & electronics",
-    tagline: "TVs, monitors and other home electronics.",
+    id: "monitor",
+    name: "Monitor",
+    tagline: "Office, home and gaming monitors.",
     art: (
       <>
         <Rect x={90} y={50} w={420} h={250} rx={12} />
@@ -300,32 +300,32 @@ const DEVICES: Device[] = [
         id: "backlight",
         label: "Backlight",
         x: 300, y: 128,
-        problem: "Dim picture or dark patches on the screen.",
-        fix: "Replace the LED backlight strips.",
+        problem: "Dim screen, dark patches, or flickering.",
+        fix: "Replace the LED backlight strips or the panel cable.",
         time: "1–2 hrs",
       },
       {
         id: "psu",
         label: "Power board",
         x: 175, y: 226,
-        problem: "Clicking, won't turn on, standby light blinks.",
+        problem: "Clicking, won't turn on, power light blinks.",
         fix: "Replace swollen capacitors or the power board.",
         time: "1–2 hrs",
       },
       {
         id: "hdmi",
-        label: "HDMI ports",
+        label: "HDMI and DisplayPort",
         x: 438, y: 277,
-        problem: "No signal or no sound from a device.",
-        fix: "Test the cable, clean or re-solder the port.",
+        problem: "No signal, or the picture cuts out.",
+        fix: "Test the cable, clean the port or re-solder it.",
         time: "30–60 min",
       },
       {
         id: "stand",
         label: "Stand",
         x: 300, y: 330,
-        problem: "Wobbly or loose on the table.",
-        fix: "Tighten or replace the mounts. Safe wall mounting too.",
+        problem: "Wobbly, sagging or loose on the desk.",
+        fix: "Tighten or replace the stand, or fit a monitor arm.",
         time: "20–30 min",
       },
     ],
@@ -413,17 +413,17 @@ export default function XRayExplorer() {
 
       {/* Header – NOT sticky so it never covers content */}
       <div className="relative z-20 border-b border-white/5 px-5 py-5 lg:px-10">
-        <div className="mx-auto flex max-w-7xl flex-wrap items-end justify-between gap-4">
+        <div className="mx-auto flex max-w-7xl flex-col items-center gap-4 text-center lg:flex-row lg:flex-wrap lg:items-end lg:justify-between lg:text-left">
           <div>
-            <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
+            <h2 className="text-balance text-2xl font-bold tracking-tight sm:text-3xl">
               See inside your device
             </h2>
-            <p className="mt-1 text-sm text-slate-400">
+            <p className="mx-auto mt-1 max-w-sm text-pretty text-sm text-slate-400 sm:max-w-none lg:mx-0">
               Hover or tap a glowing point to see the common problem and our fix.
             </p>
           </div>
 
-          <nav className="flex flex-wrap gap-2" aria-label="Devices">
+          <nav className="flex flex-wrap justify-center gap-2 lg:justify-end" aria-label="Devices">
             {DEVICES.map((d, i) => (
               <button
                 key={d.id}
@@ -463,8 +463,8 @@ export default function XRayExplorer() {
               className="xr-panel px-5 py-8 lg:px-10 lg:py-10"
             >
               <div className="mx-auto grid max-w-7xl items-center gap-8 md:grid-cols-2">
-                {/* Left: title + card */}
-                <div className="min-w-0">
+                {/* Left: title + card (centred on phones only) */}
+                <div className="min-w-0 text-center md:text-left">
                   <p className="font-mono text-xs tracking-wider text-orange-400">
                     Device {i + 1} of {N}
                   </p>
@@ -494,7 +494,7 @@ export default function XRayExplorer() {
                           Our fix
                         </p>
                         <p className="mt-0.5 text-slate-200">{active.fix}</p>
-                        <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
+                        <div className="mt-4 flex flex-wrap items-center justify-center gap-3 md:justify-between">
                           <span className="rounded-full bg-emerald-500/10 px-3 py-1 text-xs font-medium text-emerald-300">
                             Usually {active.time}
                           </span>

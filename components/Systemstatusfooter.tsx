@@ -1,9 +1,11 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useState } from "react";
 
 // ---- EDIT THESE ----
 const BRAND = "Doorstep Repairs";
+const LOGO = "/LOGO2.png"; // file lives in /public/LOGO2.png
 const PHONE = "94000000000"; // country code, no +
 const PHONE_DISPLAY = "+94 00 000 0000";
 const EMAIL = "hello@yourdomain.lk";
@@ -124,7 +126,7 @@ export default function SystemStatusFooter() {
           </div>
 
           <div
-            className={`flex items-center gap-3 px-5 py-3 text-sm font-semibold sm:text-base ${
+            className={`flex items-center justify-center gap-3 px-5 py-3 text-center text-sm font-semibold sm:text-base lg:justify-start lg:text-left ${
               open ? "bg-emerald-500/15 text-emerald-300" : "bg-amber-500/15 text-amber-300"
             }`}
             aria-live="polite"
@@ -138,16 +140,20 @@ export default function SystemStatusFooter() {
           <div className="grid gap-6 p-5 md:grid-cols-[1fr_auto] md:items-center">
             <ul className="grid gap-3 sm:grid-cols-3">
               {services.map((s) => (
-                <li key={s.label} className="rounded-xl border border-white/10 bg-white/[.03] px-4 py-3">
+                <li key={s.label} className="rounded-xl border border-white/10 bg-white/[.03] px-4 py-3 text-center lg:text-left">
                   <p className="text-xs text-slate-500">{s.label}</p>
-                  <p className={`mt-1 flex items-center gap-2 text-sm font-semibold ${open ? "text-emerald-300" : "text-amber-300"}`}>
+                  <p
+                    className={`mt-1 flex items-center justify-center gap-2 text-sm font-semibold lg:justify-start ${
+                      open ? "text-emerald-300" : "text-amber-300"
+                    }`}
+                  >
                     <span className={`h-2 w-2 rounded-full ${open ? "sf-live bg-emerald-400" : "bg-amber-400"}`} />
                     {open ? s.on : s.off}
                   </p>
                 </li>
               ))}
             </ul>
-            <div className="flex flex-wrap gap-3">
+            <div className="flex flex-wrap justify-center gap-3">
               <a href={`tel:+${PHONE}`} className="rounded-xl bg-orange-600 px-6 py-3 font-semibold shadow-lg shadow-orange-600/25 transition hover:-translate-y-0.5 hover:bg-orange-500">
                 Call now
               </a>
@@ -162,13 +168,15 @@ export default function SystemStatusFooter() {
         </div>
 
         {/* ---------- Columns ---------- */}
-        <div className="grid gap-10 py-14 sm:grid-cols-2 lg:grid-cols-[1.2fr_1fr_1.2fr_1fr]">
+        <div className="grid gap-10 py-14 text-center sm:grid-cols-2 lg:grid-cols-[1.2fr_1fr_1.2fr_1fr] lg:text-left">
           <div>
-            <p className="text-xl font-bold">{BRAND}</p>
-            <p className="mt-3 max-w-xs text-sm leading-relaxed text-slate-400">
-              One technician, repairs at your door: laptops, PCs, printers, WiFi and home electronics. All PC and laptop brands, except Apple.
+            <a href="#" aria-label={`${BRAND} home`} className="mx-auto inline-block lg:mx-0">
+              <Image src={LOGO} alt={BRAND} width={240} height={80} priority={false} className="h-12 w-auto sm:h-14" />
+            </a>
+            <p className="mx-auto mt-3 max-w-xs text-sm leading-relaxed text-slate-400 lg:mx-0">
+              One technician, repairs at your door: laptops, PCs, printers, WiFi and monitors. All PC and laptop brands, except Apple.
             </p>
-            <div className="mt-5 flex gap-3">
+            {/* <div className="mt-5 flex justify-center gap-3 lg:justify-start">
               {(
                 [
                   ["facebook", SOCIAL.facebook, "Facebook"],
@@ -188,7 +196,7 @@ export default function SystemStatusFooter() {
                   <Icon name={n} />
                 </a>
               ))}
-            </div>
+            </div> */}
           </div>
 
           <div>
@@ -217,7 +225,7 @@ export default function SystemStatusFooter() {
 
           <div>
             <p className="text-sm font-semibold text-orange-400">Service areas</p>
-            <ul className="mt-4 flex flex-wrap gap-2">
+            <ul className="mt-4 flex flex-wrap justify-center gap-2 lg:justify-start">
               {AREAS.map((a) => (
                 <li key={a} className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-slate-300">
                   {a}
@@ -244,24 +252,37 @@ export default function SystemStatusFooter() {
 
       {/* ---------- Windows-style taskbar ---------- */}
       <div className="relative border-t border-white/10 bg-[#1b1b1f]">
-        <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-x-6 gap-y-2 px-5 py-3 text-xs text-slate-400 lg:px-10">
-          <div className="flex items-center gap-3">
+        <div className="mx-auto flex max-w-7xl flex-col items-center justify-center gap-x-6 gap-y-2 px-5 py-3 text-center text-xs text-slate-400 sm:flex-row sm:flex-wrap sm:justify-between sm:text-left lg:px-10">
+          <div className="flex items-center justify-center gap-3">
             <span className="grid grid-cols-2 gap-[2px]">
               {[0, 1, 2, 3].map((i) => (
                 <span key={i} className="h-[7px] w-[7px] bg-orange-500" />
               ))}
             </span>
-            <span>
-              &copy; {now ? now.getFullYear() : 2026} {BRAND}. All rights reserved.
-            </span>
+            <div className="flex flex-col items-center gap-1 sm:items-start">
+              <span>
+                &copy; {now ? now.getFullYear() : 2026} {BRAND}. All rights reserved.
+              </span>
+              <span className="text-slate-500">
+                Site developed by{" "}
+                <a
+                  href="https://cb95.xyz"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-slate-300 underline underline-offset-4 transition hover:text-orange-300"
+                >
+                  cb95.xyz
+                </a>
+              </span>
+            </div>
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center justify-center gap-4">
             <span className="hidden items-center gap-2 sm:flex">
               <span className={`h-2 w-2 rounded-full ${open ? "bg-emerald-400" : "bg-amber-400"}`} />
               {open ? "Online" : "Offline"}
             </span>
             {now && (
-              <span className="text-right font-mono leading-tight text-slate-300" suppressHydrationWarning>
+              <span className="text-center font-mono leading-tight text-slate-300 sm:text-right" suppressHydrationWarning>
                 {clock}
                 <br />
                 <span className="text-slate-500">{date}</span>

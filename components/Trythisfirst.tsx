@@ -250,74 +250,74 @@ const GROUPS: Group[] = [
     ],
   },
   {
-    id: "tv",
-    label: "TV & Electronics",
-    icon: "📺",
+    id: "monitor",
+    label: "Monitor",
+    icon: "🖥️",
     issues: [
       {
-        id: "tv-no-picture",
-        title: "TV has no picture",
+        id: "mon-no-signal",
+        title: "No signal or no picture",
         mins: 3,
         steps: [
-          "Check the standby light is on, then use the remote or the TV's buttons to pick the right Input or Source.",
-          "Pull out the HDMI cable and push it back in firmly at both ends.",
-          "Try a different HDMI port on the TV, or a different cable.",
-          "Unplug the TV for 60 seconds, plug it straight into the wall, and try again.",
+          "Check the monitor's power light is on, then press its Input or Source button to pick the right input (HDMI, DisplayPort or VGA).",
+          "Pull out the video cable and push it back in firmly at both ends.",
+          "If your PC has a separate graphics card (ports lower down on the back), plug the cable into that card instead of the upper ports.",
+          "Try a different cable or a different port on the monitor. If you can, test the monitor with another computer.",
         ],
       },
       {
-        id: "tv-no-power",
-        title: "TV won't turn on",
+        id: "mon-no-power",
+        title: "Monitor won't turn on",
         mins: 3,
         steps: [
-          "Put fresh batteries in the remote, or use the power button on the TV itself.",
-          "Check the power cable and the wall socket (try another device in the same socket).",
-          "Unplug the TV for 60 seconds, then plug it straight into the wall, not an extension.",
-          "Watch the standby light. If it blinks or stays dark, note the pattern and tell us when you book.",
+          "Check the power cable is pushed in firmly at both ends, and that the wall socket works (test it with a phone charger).",
+          "If the monitor has a power adapter box, check the cable on both sides of it.",
+          "Unplug the monitor for 60 seconds, plug it straight into the wall, not an extension, and press the power button.",
+          "Watch the power light. If it stays dark or blinks, note the pattern and tell us when you book.",
         ],
       },
       {
-        id: "tv-no-sound",
-        title: "No sound",
-        mins: 2,
-        steps: [
-          "Check mute and volume on the TV and on any soundbar.",
-          "In the TV's sound settings, make sure the output isn't set to a speaker or device that is switched off.",
-          "Try a different HDMI port or cable for the device you are watching from (box, console).",
-          "Restart the TV and the connected device.",
-        ],
-      },
-      {
-        id: "remote",
-        title: "Remote not working",
-        mins: 2,
-        steps: [
-          "Replace the batteries with new ones.",
-          "Make sure nothing is blocking the IR sensor on the TV.",
-          "Try using the buttons on the TV itself to confirm the TV is responding.",
-          "If it still fails, the remote may need replacing or pairing again.",
-        ],
-      },
-      {
-        id: "hdmi",
-        title: "HDMI device not detected",
-        mins: 3,
-        steps: [
-          "Unplug the HDMI cable and plug it back in firmly at both ends.",
-          "Try a different HDMI port on the TV.",
-          "Switch the TV input/source to the correct HDMI number.",
-          "Try a different HDMI cable if available.",
-        ],
-      },
-      {
-        id: "smart-tv",
-        title: "Smart TV apps not loading",
+        id: "mon-flicker",
+        title: "Screen flickers or flashes",
         mins: 4,
         steps: [
-          "Check that the TV is connected to the internet (look at the network icon).",
-          "Restart the TV (unplug for 60 seconds).",
-          "Clear the cache of the app if the option exists, or reinstall the app.",
-          "Check if the TV needs a software update in its settings.",
+          "Push the video cable in firmly at both ends, and keep it away from power cables and speakers.",
+          "Try a different cable or a different port on the monitor.",
+          "Right-click the desktop, open Display settings > Advanced display, and set the refresh rate to the highest option shown.",
+          "Update the graphics driver from Windows Update or the graphics card maker's website.",
+        ],
+      },
+      {
+        id: "mon-blurry",
+        title: "Picture is blurry or stretched",
+        mins: 3,
+        steps: [
+          "Right-click the desktop and open Display settings.",
+          "Under Display resolution, choose the option marked Recommended.",
+          "Set Scale to the recommended value (often 100% or 125%).",
+          "If it is still stretched, press the monitor's Auto or Menu button and look for an Aspect ratio or Auto adjust option.",
+        ],
+      },
+      {
+        id: "mon-second",
+        title: "Second monitor not detected",
+        mins: 4,
+        steps: [
+          "Check the second monitor is on and set to the right input, and that its cable is pushed in at both ends.",
+          "Press the Windows key + P and choose Extend (or Duplicate).",
+          "Open Settings > System > Display and click Detect under Multiple displays.",
+          "Try a different cable or port. If the PC has a separate graphics card, use the ports on that card.",
+        ],
+      },
+      {
+        id: "mon-lines",
+        title: "Lines, spots or wrong colours",
+        mins: 3,
+        steps: [
+          "Push the video cable in firmly at both ends, and try a different cable.",
+          "Check the colour settings in the monitor's own menu and choose Reset or Factory reset.",
+          "Try the monitor with another computer. If the lines or spots are still there, the fault is in the monitor.",
+          "Lines that don't move or dark patches that don't change usually mean the screen panel is damaged and needs a repair.",
         ],
       },
     ],
@@ -361,7 +361,7 @@ export default function TryThisFirst() {
 
       <div className="relative mx-auto w-full max-w-7xl">
         {/* Header */}
-        <div className="mb-8 max-w-2xl">
+        <div className="mx-auto mb-8 max-w-2xl text-center lg:mx-0 lg:text-left">
           <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">Try this first</h2>
           <p className="mt-3 text-slate-400">
             Free fixes you can do yourself in a few minutes. If they don&apos;t work, book a home visit and we&apos;ll take it from there.
@@ -369,7 +369,7 @@ export default function TryThisFirst() {
         </div>
 
         {/* Warning */}
-        <div className="mb-8 flex items-start gap-3 rounded-2xl border border-amber-400/30 bg-amber-500/10 px-5 py-4">
+        <div className="mb-8 flex flex-col items-center gap-2 rounded-2xl border border-amber-400/30 bg-amber-500/10 px-5 py-4 text-center sm:flex-row sm:items-start sm:gap-3 sm:text-left">
           <span className="text-xl">⚠️</span>
           <p className="text-sm leading-relaxed text-amber-100">
             Stop and don&apos;t try these if you smell burning, see smoke or a swollen battery, or liquid got inside. Switch off, unplug, and book a visit instead.
@@ -377,7 +377,7 @@ export default function TryThisFirst() {
         </div>
 
         {/* Tabs */}
-        <div role="tablist" aria-label="Device type" className="mb-8 flex flex-wrap gap-2">
+        <div role="tablist" aria-label="Device type" className="mb-8 flex flex-wrap justify-center gap-2 lg:justify-start">
           {GROUPS.map((g, i) => {
             const on = tab === g.id;
             return (
@@ -411,7 +411,7 @@ export default function TryThisFirst() {
             id={`panel-${g.id}`}
             aria-labelledby={`tab-${g.id}`}
             hidden={tab !== g.id}
-            className="grid gap-4 sm:grid-cols-2"
+            className={`${tab === g.id ? "flex" : "hidden"} flex-wrap items-start justify-center gap-4 lg:justify-start`}
           >
             {g.issues.map((issue) => {
               const done = issue.steps.filter((_, i) => checked[`${issue.id}-${i}`]).length;
@@ -424,7 +424,7 @@ export default function TryThisFirst() {
               return (
                 <div
                   key={issue.id}
-                  className={`rounded-2xl border transition-all duration-300 ${
+                  className={`w-full max-w-xl rounded-2xl border transition-all duration-300 sm:w-[calc(50%-0.5rem)] sm:max-w-none ${
                     isOpen
                       ? "border-orange-500/40 bg-[#121215] shadow-xl shadow-orange-900/20"
                       : "border-white/10 bg-[#0c0c0e] hover:border-white/20 hover:bg-[#101012]"
@@ -493,7 +493,7 @@ export default function TryThisFirst() {
 
                       <div className="mt-5 border-t border-white/10 pt-4">
                         {!res && (
-                          <div className="flex flex-wrap items-center gap-3">
+                          <div className="flex flex-wrap items-center justify-center gap-3 lg:justify-start">
                             <span className="text-sm text-slate-400">Did that fix it?</span>
                             <button
                               type="button"
@@ -513,8 +513,10 @@ export default function TryThisFirst() {
                         )}
 
                         {res === "fixed" && (
-                          <div className="flex flex-wrap items-center gap-3">
-                            <p className="text-sm text-emerald-300">Glad that worked. No visit needed.</p>
+                          <div className="flex flex-wrap items-center justify-center gap-3 lg:justify-start">
+                            <p className="text-center text-sm text-emerald-300 lg:text-left">
+                              Glad that worked. No visit needed.
+                            </p>
                             <button
                               type="button"
                               onClick={() => reset(issue)}
@@ -526,11 +528,11 @@ export default function TryThisFirst() {
                         )}
 
                         {res === "nope" && (
-                          <div>
+                          <div className="text-center lg:text-left">
                             <p className="text-sm text-slate-300">
                               Thanks for trying. That points to a fault that needs a proper look.
                             </p>
-                            <div className="mt-3 flex flex-wrap items-center gap-3">
+                            <div className="mt-3 flex flex-wrap items-center justify-center gap-3 lg:justify-start">
                               <a
                                 href="#book"
                                 className="rounded-xl bg-orange-600 px-5 py-2.5 text-sm font-semibold shadow-lg shadow-orange-600/25 transition hover:-translate-y-0.5 hover:bg-orange-500"

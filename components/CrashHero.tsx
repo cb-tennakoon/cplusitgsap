@@ -5,16 +5,29 @@ import { useEffect, useState } from "react";
 const PHONE = "94000000000"; // country code, no +
 
 const HEADLINE = ["Computer", "crashed?", "Relax,", "we", "come", "to", "you."];
-const DEVICES = ["laptops", "PCs", "printers", "WiFi routers", "TVs and monitors"];
+const DEVICES = ["laptops", "PCs", "printers", "WiFi routers", "Monitors"];
+
+// The arrival time is always MORE than 45 minutes, and different on every visit.
+const ETA_MIN = 46;
+const ETA_MAX = 72;
+const randomEta = () => ETA_MIN + Math.floor(Math.random() * (ETA_MAX - ETA_MIN + 1));
 
 export default function CrashHero() {
-  const [eta, setEta] = useState(45);
+  // Fixed first value so server and browser HTML match. A random one is picked right after load.
+  const [eta, setEta] = useState(52);
   const [dev, setDev] = useState(0);
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
+    setEta(randomEta());
     const a = setInterval(() => setDev((d) => (d + 1) % DEVICES.length), 2200);
-    const b = setInterval(() => setEta((m) => (m > 38 ? m - 1 : m)), 1800);
+    // drifts a little like a live estimate, never below ETA_MIN or above ETA_MAX
+    const b = setInterval(() => {
+      setEta((m) => {
+        const step = [-1, -1, 0, 1][Math.floor(Math.random() * 4)];
+        return Math.min(ETA_MAX, Math.max(ETA_MIN, m + step));
+      });
+    }, 4000);
     return () => {
       clearInterval(a);
       clearInterval(b);
