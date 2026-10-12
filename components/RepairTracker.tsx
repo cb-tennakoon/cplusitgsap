@@ -6,7 +6,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 if (typeof window !== "undefined") gsap.registerPlugin(ScrollTrigger);
 
-const PHONE = "94000000000"; // country code, no +
+const PHONE = "+94717714492"; // country code, no +
 
 const STEPS = [
   { icon: "📱", title: "Booked", time: "Instant", text: "We confirm on WhatsApp and send the technician's name and photo." },

@@ -2,13 +2,18 @@
 
 import { useEffect, useState } from "react";
 
-// ---- EDIT THESE (keep the hours the same as SystemStatusFooter.tsx) ----
+// ---- EDIT THESE (keep the same as SystemStatusFooter.tsx) ----
 const BRAND = "Doorstep Repairs";
-const LOGO_SRC = "/LOGO2.png"; // file in the public/ folder, must match the name exactly
-const PHONE = "94000000000"; // country code, no +
-const PHONE_DISPLAY = "+94 00 000 0000";
-const OPEN_HOUR = 8; // placeholder, set your real opening time
-const CLOSE_HOUR = 21; // 9 PM
+const LOGO_SRC = "/LOGO2.png"; // file in the public/ folder
+const PHONE = "+94 717714492"; // country code, no +
+const PHONE_DISPLAY = "+94 717714492";
+
+const OPEN_HOUR = 8;
+const OPEN_MINUTE = 0;
+
+const CLOSE_HOUR = 19; // 7:30 PM
+const CLOSE_MINUTE = 30;
+
 const TZ = "Asia/Colombo";
 // ------------------------------------------------------------------------
 
@@ -16,16 +21,19 @@ const NAV = [
   { id: "symptoms", label: "What we fix" },
   { id: "xray", label: "Inside your device" },
   { id: "tracker", label: "How it works" },
-  // { id: "repair-log", label: "Recent jobs" },
   { id: "contact", label: "Contact" },
 ];
 
-const h12 = (h: number) => `${h % 12 || 12} ${h < 12 ? "AM" : "PM"}`;
+const formatTime = (hour: number, minute: number = 0) => {
+  const period = hour < 12 ? "AM" : "PM";
+  const h = hour % 12 || 12;
+  if (minute === 0) return `${h} ${period}`;
+  return `${h}:${String(minute).padStart(2, "0")} ${period}`;
+};
 
 function Logo() {
   const [failed, setFailed] = useState(false);
 
-  // if the image is missing or broken, show the four orange squares instead
   if (failed) {
     return (
       <span className="grid grid-cols-2 gap-[2px]" aria-hidden>
@@ -56,16 +64,16 @@ export default function SiteHeader() {
   const [menu, setMenu] = useState(false);
   const [active, setActive] = useState("");
 
-  // clock, for the open/closed pill
   useEffect(() => {
     setNow(new Date());
     const t = setInterval(() => setNow(new Date()), 30000);
     return () => clearInterval(t);
   }, []);
 
-  // shadow after scrolling, and hide while the pinned X-ray section fills the screen
   useEffect(() => {
-    const mq = window.matchMedia("(min-width: 768px) and (prefers-reduced-motion: no-preference)");
+    const mq = window.matchMedia(
+      "(min-width: 768px) and (prefers-reduced-motion: no-preference)"
+    );
     let raf = 0;
     const check = () => {
       raf = 0;
@@ -92,9 +100,10 @@ export default function SiteHeader() {
     };
   }, []);
 
-  // highlight the link of the section in the middle of the screen
   useEffect(() => {
-    const els = NAV.map((n) => document.getElementById(n.id)).filter(Boolean) as HTMLElement[];
+    const els = NAV.map((n) => document.getElementById(n.id)).filter(
+      Boolean
+    ) as HTMLElement[];
     if (!els.length) return;
     const io = new IntersectionObserver(
       (entries) => {
@@ -108,7 +117,6 @@ export default function SiteHeader() {
     return () => io.disconnect();
   }, []);
 
-  // Esc closes the mobile menu
   useEffect(() => {
     if (!menu) return;
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && setMenu(false);
@@ -116,13 +124,51 @@ export default function SiteHeader() {
     return () => window.removeEventListener("keydown", onKey);
   }, [menu]);
 
-  const hour = now ? Number(new Intl.DateTimeFormat("en-GB", { timeZone: TZ, hour: "numeric", hour12: false }).format(now)) % 24 : null;
-  const open = hour === null ? true : hour >= OPEN_HOUR && hour < CLOSE_HOUR;
-  const status = open ? `Open until ${h12(CLOSE_HOUR)}` : `Closed, opens ${h12(OPEN_HOUR)}`;
-  const waMsg = encodeURIComponent("Hi, I'd like to book a home visit repair.");
+  const hour = now
+    ? Number(
+        new Intl.DateTimeFormat("en-GB", {
+          timeZone: TZ,
+          hour: "numeric",
+          hour12: false,
+        }).format(now)
+      ) % 24
+    : null;
+
+  const minute = now
+    ? Number(
+        new Intl.DateTimeFormat("en-GB", {
+          timeZone: TZ,
+          minute: "numeric",
+        }).format(now)
+      )
+    : 0;
+
+  // Open from 8:00 to 19:30
+  const open =
+    hour === null
+      ? true
+      : hour > OPEN_HOUR && hour < CLOSE_HOUR
+        ? true
+        : hour === OPEN_HOUR && minute >= OPEN_MINUTE
+          ? true
+          : hour === CLOSE_HOUR && minute < CLOSE_MINUTE
+            ? true
+            : false;
+
+  const status = open
+    ? `Open until ${formatTime(CLOSE_HOUR, CLOSE_MINUTE)}`
+    : `Closed, opens ${formatTime(OPEN_HOUR, OPEN_MINUTE)}`;
+
+  const waMsg = encodeURIComponent(
+    "Hi, I'd like to book a home or office visit repair."
+  );
 
   return (
-    <header className={`sticky top-0 z-50 transition-transform duration-300 ${hidden ? "-translate-y-full" : "translate-y-0"}`}>
+    <header
+      className={`sticky top-0 z-50 transition-transform duration-300 ${
+        hidden ? "-translate-y-full" : "translate-y-0"
+      }`}
+    >
       <style>{`
         @keyframes sh-ping{0%{box-shadow:0 0 0 0 rgba(16,185,129,.55)}100%{box-shadow:0 0 0 8px rgba(16,185,129,0)}}
         .sh-live{animation:sh-ping 1.8s ease-out infinite}
@@ -138,7 +184,11 @@ export default function SiteHeader() {
       >
         <div className="mx-auto flex h-14 max-w-7xl items-center justify-between gap-4 px-5 lg:h-16 lg:px-10">
           {/* brand */}
-          <a href="#" className="flex items-center gap-3 text-slate-900" aria-label={`${BRAND}, back to top`}>
+          <a
+            href="#"
+            className="flex items-center gap-3 text-slate-900"
+            aria-label={`${BRAND}, back to top`}
+          >
             <Logo />
           </a>
 
@@ -152,11 +202,15 @@ export default function SiteHeader() {
                   href={`#${n.id}`}
                   aria-current={on ? "true" : undefined}
                   className={`relative rounded-lg px-3 py-2 text-sm font-medium transition ${
-                    on ? "bg-gray-100 text-slate-900" : "text-slate-600 hover:bg-gray-100 hover:text-slate-900"
+                    on
+                      ? "bg-gray-100 text-slate-900"
+                      : "text-slate-600 hover:bg-gray-100 hover:text-slate-900"
                   }`}
                 >
                   {n.label}
-                  {on && <span className="absolute inset-x-0 -bottom-[7px] mx-auto h-0.5 w-5 rounded bg-orange-500" />}
+                  {on && (
+                    <span className="absolute inset-x-0 -bottom-[7px] mx-auto h-0.5 w-5 rounded bg-orange-500" />
+                  )}
                 </a>
               );
             })}
@@ -166,16 +220,35 @@ export default function SiteHeader() {
           <div className="flex items-center gap-3">
             <span
               className={`hidden items-center gap-2 rounded-full border px-3 py-1 text-xs font-semibold md:flex ${
-                open ? "border-emerald-600/30 bg-emerald-50 text-emerald-700" : "border-amber-600/30 bg-amber-50 text-amber-700"
+                open
+                  ? "border-emerald-600/30 bg-emerald-50 text-emerald-700"
+                  : "border-amber-600/30 bg-amber-50 text-amber-700"
               }`}
               suppressHydrationWarning
             >
-              <span className={`h-2 w-2 rounded-full ${open ? "sh-live bg-emerald-500" : "bg-amber-500"}`} />
+              <span
+                className={`h-2 w-2 rounded-full ${
+                  open ? "sh-live bg-emerald-500" : "bg-amber-500"
+                }`}
+              />
               {status}
             </span>
 
-            <a href={`tel:+${PHONE}`} className="hidden items-center gap-2 text-sm font-semibold text-slate-700 transition hover:text-orange-600 xl:flex">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+            <a
+              href={`tel:+${PHONE}`}
+              className="hidden items-center gap-2 text-sm font-semibold text-slate-700 transition hover:text-orange-600 xl:flex"
+            >
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.8"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden
+              >
                 <path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z" />
               </svg>
               {PHONE_DISPLAY}
@@ -197,8 +270,21 @@ export default function SiteHeader() {
               aria-label={menu ? "Close menu" : "Open menu"}
               className="grid h-10 w-10 place-items-center rounded-lg border border-slate-300 bg-white text-slate-800 transition hover:border-orange-500 lg:hidden"
             >
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden>
-                {menu ? <path d="M6 6l12 12M18 6L6 18" /> : <path d="M4 7h16M4 12h16M4 17h16" />}
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                aria-hidden
+              >
+                {menu ? (
+                  <path d="M6 6l12 12M18 6L6 18" />
+                ) : (
+                  <path d="M4 7h16M4 12h16M4 17h16" />
+                )}
               </svg>
             </button>
           </div>
@@ -220,7 +306,9 @@ export default function SiteHeader() {
                     href={`#${n.id}`}
                     onClick={() => setMenu(false)}
                     className={`flex items-center justify-between rounded-lg px-4 py-3 text-sm font-medium transition ${
-                      on ? "bg-gray-100 text-slate-900" : "text-slate-700 hover:bg-gray-100"
+                      on
+                        ? "bg-gray-100 text-slate-900"
+                        : "text-slate-700 hover:bg-gray-100"
                     }`}
                   >
                     {n.label}
@@ -232,8 +320,16 @@ export default function SiteHeader() {
           </ul>
 
           <div className="border-t border-slate-300 bg-gray-100 p-4">
-            <p className={`mb-3 flex items-center gap-2 text-xs font-semibold ${open ? "text-emerald-700" : "text-amber-700"}`}>
-              <span className={`h-2 w-2 rounded-full ${open ? "bg-emerald-500" : "bg-amber-500"}`} />
+            <p
+              className={`mb-3 flex items-center gap-2 text-xs font-semibold ${
+                open ? "text-emerald-700" : "text-amber-700"
+              }`}
+            >
+              <span
+                className={`h-2 w-2 rounded-full ${
+                  open ? "bg-emerald-500" : "bg-amber-500"
+                }`}
+              />
               {status}
             </p>
             <a
@@ -244,7 +340,10 @@ export default function SiteHeader() {
               Book a visit
             </a>
             <div className="grid grid-cols-2 gap-3">
-              <a href={`tel:+${PHONE}`} className="rounded-xl border border-slate-300 bg-white px-4 py-3 text-center text-sm font-semibold text-orange-700">
+              <a
+                href={`tel:+${PHONE}`}
+                className="rounded-xl border border-slate-300 bg-white px-4 py-3 text-center text-sm font-semibold text-orange-700"
+              >
                 Call now
               </a>
               <a

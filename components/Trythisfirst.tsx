@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-const PHONE = "94000000000"; // country code, no +
+const PHONE = "+94717714492"; // country code, no +
 
 type Issue = { id: string; title: string; mins: number; steps: string[] };
 type Group = { id: string; label: string; icon: string; issues: Issue[] };
@@ -189,7 +189,7 @@ const GROUPS: Group[] = [
           "Check a second device. If your phone has no internet either, the problem is the router or your provider.",
           "Unplug the router (and the modem, if it is a separate box) from power for 30 seconds.",
           "Plug it back in and wait 2 to 3 minutes for the lights to settle.",
-          "Check the cable from the wall or provider box is pushed firmly into the router's internet port. If the lights still show a fault, ask your provider about an outage.",
+          "Check the cable from the wall or provider box. Ask your provider about an outage.",
         ],
       },
       {

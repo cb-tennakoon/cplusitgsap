@@ -2,7 +2,7 @@
 
 import { Fragment, useCallback, useEffect, useRef, useState } from "react";
 
-const PHONE = "94777143928"; // country code, no +
+const PHONE = "+94717714492"; // country code, no +
 const LOG_ENDPOINT = "";
 
 const DEVICES: { label: string; problems: string[] }[] = [
@@ -10,16 +10,36 @@ const DEVICES: { label: string; problems: string[] }[] = [
   { label: "Desktop PC", problems: ["Won't turn on", "Slow or freezing", "Virus or pop-ups", "No display", "Upgrade"] },
   { label: "Printer", problems: ["Printing problem", "Paper jam", "Install or setup", "Poor print quality"] },
   { label: "WiFi / Router", problems: ["No signal in some rooms", "Keeps disconnecting", "New router setup", "Forgot password"] },
-  { label: "TV / Electronics", problems: ["No display", "No sound", "Port or connector issue", "Won't turn on"] },
+  { label: "Monitor", problems: ["No display", "Flickering screen", "Dead pixels / lines", "Port or connector issue", "Won't turn on"] },
   { label: "Something else", problems: [] },
 ];
 
-const AREAS = ["Nugegoda", "Dehiwala", "Mount Lavinia", "Rajagiriya", "Maharagama", "Kotte", "Battaramulla", "Kaduwela", "Piliyandala", "Colombo"];
+const AREAS = [
+  "Kelaniya",
+  "Wattala",
+  "Kiribathgoda",
+  "Peliyagoda",
+  "Mulleriyawa / Kolonnawa",
+  "Sapugakanda",
+  "Makola",
+  "Siyambalape",
+  "Mahara",
+  "Kaduwela",
+  "Angoda",
+  "Thalawathugoda",
+  "Nawala",
+  "Biyagama",
+  "Colombo 1 to 15",
+  "Nugegoda",
+  "Rajagiriya",
+  "Battaramulla",
+  "Kotte",
+];
 
 const SLOTS = [
   { label: "Morning (9-12)", end: 12 },
-  { label: "Afternoon (12-3)", end: 15 },
-  { label: "Evening (3-7)", end: 19 },
+  { label: "Afternoon (12-4)", end: 16 },
+  { label: "Evening (4-7:30)", end: 19.5 },
 ];
 
 type Field = "device" | "problem" | "area" | "day" | "slot" | "name";
@@ -34,7 +54,10 @@ const slotNeeded = (day?: string) => day !== ASAP && day !== LATER;
 
 const prefersReduced = () => typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const nowTime = () => new Date().toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" });
-const todayOpen = () => SLOTS.some((s) => s.end > new Date().getHours() + 1);
+const todayOpen = () => {
+  const now = new Date().getHours() + new Date().getMinutes() / 60;
+  return SLOTS.some((s) => s.end > now);
+};
 
 const fmtDate = (d: Date) => d.toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short" });
 const dayFor = (offset: number) => {
@@ -91,7 +114,7 @@ const DEVICE_RX: [string, RegExp][] = [
   ["Desktop PC", /\b(desktop|pc|cpu|computer|tower)s?\b/],
   ["Printer", /\b(printer|scanner|toner|cartridge)s?\b/],
   ["WiFi / Router", /\b(wi-?fi|router|modem|internet|network)\b/],
-  ["TV / Electronics", /\b(tv|television|hdmi|speaker|monitor|console|playstation|xbox|projector)s?\b/],
+  ["Monitor", /\b(monitor|screen|display)\b/],
 ];
 
 const PROBLEM_RX: [string, RegExp][] = [
@@ -106,13 +129,14 @@ const PROBLEM_RX: [string, RegExp][] = [
   ["Keeps disconnecting", /disconnect|dropping|keeps dropping/],
   ["No signal in some rooms", /no signal|dead zone|weak signal/],
   ["No display", /no (picture|display|video|image)|black screen|blank screen/],
-  ["No sound", /no (sound|audio)/],
-  ["Port or connector issue", /hdmi|usb port|\bport\b/],
+  ["Flickering screen", /flicker|flickering/],
+  ["Dead pixels / lines", /dead pixel|lines on|vertical line|horizontal line/],
+  ["Port or connector issue", /hdmi|usb port|\bport\b|vga|displayport/],
   ["Upgrade", /upgrade|\bssd\b|\bram\b|more storage/],
   ["Install or setup", /install|reinstall|set ?up|windows/],
 ];
 
-const AREA_RX = AREAS.map((a) => [a, new RegExp(`\\b${a.toLowerCase()}\\b`)] as const);
+const AREA_RX = AREAS.map((a) => [a, new RegExp(`\\b${a.toLowerCase().replace(/[\/]/g, "\\$&")}\\b`)] as const);
 const WEEKDAYS = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"];
 const WEEKDAY_RX = /\b(sunday|monday|tuesday|wednesday|thursday|friday|saturday|sun|mon|tues?|wed|thu|thurs?|fri|sat)\b/;
 
@@ -173,7 +197,7 @@ const promptFor = (f: Field, a: Answers) =>
   })[f];
 
 const PLACEHOLDER: Record<Field, string> = {
-  device: "Or type it all: laptop screen cracked, Nugegoda, tomorrow morning",
+  device: "Or type it all: laptop screen cracked, Kelaniya, tomorrow morning",
   problem: "Or describe the problem",
   area: "Or type your area",
   day: "Or type a day: Monday, tomorrow, asap",
@@ -438,7 +462,14 @@ export default function ChatBookingPro() {
   const pct = Math.round((answered / need.length) * 100);
 
   const problems = DEVICES.find((d) => d.label === ans.device)?.problems ?? [];
-  const slotOptions = SLOTS.filter((s) => !(ans.day?.startsWith("Today") && s.end <= new Date().getHours() + 1));
+
+  // Fixed filter: show all slots that haven't ended yet
+  const nowDecimal = new Date().getHours() + new Date().getMinutes() / 60;
+  const slotOptions = SLOTS.filter((s) => {
+    if (!ans.day?.startsWith("Today")) return true;
+    return s.end > nowDecimal;
+  });
+
   const waHref = booking ? `https://wa.me/${PHONE}?text=${encodeURIComponent(waText(booking))}` : "#";
   const inputOn = step !== "confirm" && step !== "done";
   const field: Field | null = step === "busy" || step === "confirm" || step === "done" ? null : step;
@@ -469,17 +500,12 @@ export default function ChatBookingPro() {
         }
       `}</style>
 
-      {/* Animated light-black background */}
       <div className="bg-animate absolute inset-0" />
-
-      {/* Floating soft color blobs */}
       <div className="blob1 pointer-events-none absolute -left-20 top-10 h-72 w-72 rounded-full bg-orange-500/15 blur-[100px]" />
       <div className="blob2 pointer-events-none absolute -right-16 top-1/3 h-80 w-80 rounded-full bg-emerald-500/12 blur-[110px]" />
       <div className="blob3 pointer-events-none absolute bottom-10 left-1/3 h-64 w-64 rounded-full bg-amber-500/10 blur-[90px]" />
 
       <div className="relative mx-auto w-full max-w-7xl">
-        
-        {/* Header */}
         <div className="relative mb-12 overflow-hidden rounded-3xl border border-white/10 bg-white/[0.06] px-6 py-12 text-center shadow-2xl shadow-black/40 backdrop-blur-md sm:px-10">
           <div className="pointer-events-none absolute -left-20 -top-20 h-64 w-64 rounded-full bg-orange-500/20 blur-[100px]" />
           <div className="pointer-events-none absolute -bottom-16 -right-16 h-56 w-56 rounded-full bg-emerald-500/15 blur-[90px]" />
@@ -496,7 +522,7 @@ export default function ChatBookingPro() {
             <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl lg:text-5xl">
               Book a{" "}
               <span className="bg-gradient-to-r from-orange-400 via-orange-500 to-amber-400 bg-clip-text text-transparent">
-                home visit
+                technician visit
               </span>
             </h2>
 
@@ -523,13 +549,11 @@ export default function ChatBookingPro() {
           </div>
         </div>
 
-        {/* Chat box */}
         <div className="mx-auto max-w-2xl">
           <div
             ref={boxRef}
             className="overflow-hidden rounded-2xl border border-white/10 bg-[#121215]/90 shadow-2xl shadow-black/50 backdrop-blur-md"
           >
-            {/* header + progress */}
             <div className="bg-gradient-to-r from-[#1c1c22] to-[#25252d]">
               <div className="flex items-center gap-3 px-4 py-3">
                 <span className="grid h-9 w-9 shrink-0 grid-cols-2 place-content-center gap-[3px] rounded-full bg-orange-500 p-2.5">
@@ -551,7 +575,6 @@ export default function ChatBookingPro() {
               </div>
             </div>
 
-            {/* feed */}
             <div
               ref={feedRef}
               role="log"
@@ -573,7 +596,6 @@ export default function ChatBookingPro() {
               )}
             </div>
 
-            {/* reply panel */}
             <div className="min-h-[8rem] border-t border-white/10 bg-black/30 px-4 py-3">
               {step === "device" && (
                 <div className="mb-3 flex flex-wrap gap-2">
@@ -614,8 +636,11 @@ export default function ChatBookingPro() {
 
               {step === "slot" && (
                 <div className="mb-3 flex flex-wrap gap-2">
+                  {ans.day?.startsWith("Today") && (
+                    <Chip i={0} label="ASAP / Next available" onClick={() => pick("slot", "ASAP / Next available")} />
+                  )}
                   {slotOptions.map((s, i) => (
-                    <Chip key={s.label} i={i} label={s.label} onClick={() => pick("slot", s.label)} />
+                    <Chip key={s.label} i={i + 1} label={s.label} onClick={() => pick("slot", s.label)} />
                   ))}
                 </div>
               )}
