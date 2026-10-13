@@ -12,8 +12,8 @@ import Trythisfirst   from '@/components/Trythisfirst';
 export default function Page() {
   return (
     <>
-      <Siteheader/>
       <BootScreen />
+      <Siteheader/>
       <CrashHero />
       <SymptomPicker/>
       <XRayExplorer/>

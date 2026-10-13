@@ -20,13 +20,13 @@ const RAW: [string, string, string, number][] = [
   ["Battery", "Worn-out laptop battery replaced", "/heroimg/Battery.jpg", 95],
   ["Keyboard", "Spilled-drink keyboard swapped", "/heroimg/Keyboard.jpg", 270],
   ["Monitor", "Flickering monitor diagnosed", "/heroimg/Monitor.jpg", 230],
-  ["RAM", "Memory upgrade for smooth multitasking", "https://picsum.photos/seed/ram3/800/600", 300],
-  ["Network", "Home network cabling and setup", "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&h=600&fit=crop", 180],
-  ["Windows", "Fresh Windows install + drivers", "https://picsum.photos/seed/windows4/800/600", 205],
-  ["Cooling", "Overheating fixed: fan + new paste", "https://images.unsplash.com/photo-1593640408182-31c70c8268f5?w=800&h=600&fit=crop", 10],
-  ["Electronics", "Small electronics & gadget repair", "https://picsum.photos/seed/elec5/800/600", 40],
-  ["Backup", "Backup and cloud storage set up", "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&h=600&fit=crop", 215],
-  ["Gaming", "Gaming PC tuned for smooth play", "https://images.unsplash.com/photo-1593642532744-d97ac79d1c25?w=800&h=600&fit=crop", 280],
+  ["RAM", "Memory upgrade for smooth multitasking", "/heroimg/RAM.jpg", 300],
+  ["Network", "Home network cabling and setup", "/heroimg/Network.jpg", 180],
+  ["Windows", "Fresh Windows install + drivers", "/heroimg/Windows.jpg", 205],
+  ["Cooling", "Overheating fixed: fan + new paste", "/heroimg/Cooling.jpg", 10],
+  ["Electronics", "Small electronics & gadget repair", "/heroimg/Electronics.jpg", 40],
+  ["Backup", "Backup and cloud storage set up", "/heroimg/Backup.jpg", 215],
+  ["Gaming", "Gaming PC tuned for smooth play", "/heroimg/Gaming.jpg", 280],
 ];
 
 const SLIDES = RAW.map(([tag, title, src, hue]) => ({
@@ -329,7 +329,7 @@ export default function CrashHero() {
                   {DEVICES[dev]}
                 </span>
               </span>{" "}
-              and everything else that stopped working. We repair every PC and laptop brand, except Apple.
+              and everything else that stopped working. We repair every PC and laptop brand.
             </p>
 
             <div className="g-fade flex flex-wrap items-center justify-center gap-3 opacity-0 lg:justify-start">
@@ -353,14 +353,14 @@ export default function CrashHero() {
             </div>
 
             <div className="mt-5 flex flex-wrap items-center justify-center gap-2 lg:justify-start">
-              {["Dell", "HP", "Lenovo", "Asus", "Acer", "MSI", "Samsung"].map((b) => (
+              {["Dell", "HP", "Lenovo", "Asus", "Acer", "MSI", "Samsung","Toshiba"].map((b) => (
                 <span key={b} className="g-chip rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-slate-300 opacity-0">
                   {b}
                 </span>
               ))}
-              <span className="g-chip rounded-full border border-red-400/30 bg-red-500/10 px-3 py-1 text-xs font-medium text-red-300 opacity-0">
+              {/* <span className="g-chip rounded-full border border-red-400/30 bg-red-500/10 px-3 py-1 text-xs font-medium text-red-300 opacity-0">
                 No Apple / Mac
-              </span>
+              </span> */}
             </div>
           </div>
 

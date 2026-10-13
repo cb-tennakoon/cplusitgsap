@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 const BRAND = "Doorstep Repairs";
 const LOGO_SRC = "/LOGO2.png"; // file in the public/ folder
 const PHONE = "+94 717714492"; // country code, no +
-const PHONE_DISPLAY = "+94 717714492";
+const PHONE_DISPLAY = "+94 717 714 492";
 
 const OPEN_HOUR = 8;
 const OPEN_MINUTE = 0;

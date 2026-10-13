@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 const BRAND = "C Plus iT Solutions";
 const LOGO = "/LOGO2.png";
 const PHONE = "+94717714492";
-const PHONE_DISPLAY = "+94717714492";
+const PHONE_DISPLAY = "+94 717 714 492";
 const EMAIL = "info@cplusit.com";
 
 const OPEN_HOUR = 8;
@@ -319,7 +319,7 @@ export default function SystemStatusFooter() {
               One technician. We come to your{" "}
               <strong className="text-slate-300">home</strong> or{" "}
               <strong className="text-slate-300">office</strong>. Laptops, PCs,
-              printers, WiFi and monitors. All brands except Apple.
+              printers, WiFi and monitors.
             </p>
           </div>
 
