@@ -6,7 +6,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 if (typeof window !== "undefined") gsap.registerPlugin(ScrollTrigger);
 
-const PHONE = "+94717714492";
+const PHONE = "94717714492";
 const HEADLINE = ["Computer", "crashed?", "Relax,", "we", "come", "to", "you."];
 const DEVICES = ["Laptops", "PCs", "Printers", "WiFi routers", "Monitors"];
 

@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 // ---- EDIT THESE ----
 const BRAND = "C Plus iT Solutions";
 const LOGO = "/LOGO2.png";
-const PHONE = "+94717714492";
+const PHONE = "94717714492";
 const PHONE_DISPLAY = "+94 717 714 492";
 const EMAIL = "info@cplusit.com";
 

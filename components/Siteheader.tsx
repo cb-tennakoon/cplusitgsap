@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 // ---- EDIT THESE (keep the same as SystemStatusFooter.tsx) ----
 const BRAND = "Doorstep Repairs";
 const LOGO_SRC = "/LOGO2.png"; // file in the public/ folder
-const PHONE = "+94 717714492"; // country code, no +
+const PHONE = "94 717714492"; // country code, no +
 const PHONE_DISPLAY = "+94 717 714 492";
 
 const OPEN_HOUR = 8;
